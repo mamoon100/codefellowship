@@ -1,20 +1,99 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-<form th:action="@{/signup}" method="post" th:object="${user}">
-    <input type="text" name="username" th:field="*{username}" placeholder="User Name">
-    <input type="password" name="password" th:field="*{password}" placeholder="Password">
-    <input type="text" name="firstName" th:field="*{firstName}" placeholder="First Name">
-    <input type="text" name="lastName" th:field="*{lastName}" placeholder="Last Name">
-    <input type="date" name="DOB" th:field="*{DOB}" placeholder="06/04/1998">
-    <input type="text" name="bio" th:field="*{bio}" placeholder="bio">
-    <button type="submit">Submit</button>
-
-
-</form>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Sign up</title>
+    <link th:include="fragments:: link" />
+    <link
+      rel="stylesheet"
+      href="./styles/signup.css"
+      th:href="@{./styles/signup.css}"
+    />
+  </head>
+  <body>
+    <header th:replace="fragments :: header"></header>
+      <!-- <a href="/">
+        <img
+          src="./assets/codefellow.png"
+          th:src="@{./assets/codefellow.png}"
+        />
+      </a> -->
+    </header>
+    <main>
+      <form
+        th:action="@{/signup}"
+        method="post"
+        th:object="${user}"
+        sec:authorize="isAnonymous()"
+      >
+        <div class="mb-3">
+          <label for="username" class="form-label">Username:</label>
+          <input
+            type="text"
+            class="form-control"
+            id="username"
+            name="username"
+            th:field="*{username}"
+            placeholder="John Doe."
+          />
+        </div>
+        <div class="mb-3">
+          <label for="password" class="form-label">Password</label>
+          <input
+            type="password"
+            class="form-control"
+            id="password"
+            name="password"
+            th:field="*{password}"
+          />
+        </div>
+        <div class="input-group mb-3">
+          <span class="input-group-text">First and last name</span>
+          <input
+            type="text"
+            aria-label="First name"
+            class="form-control"
+            name="firstName"
+            th:field="*{firstName}"
+          />
+          <input
+            type="text"
+            aria-label="Last name"
+            class="form-control"
+            name="lastName"
+            th:field="*{lastName}"
+          />
+        </div>
+        <div class="mb-3">
+          <label for="DOB" class="form-label">Date of birth:</label>
+          <input
+            type="date"
+            class="form-control"
+            id="DOB"
+            name="DOB"
+            th:field="*{DOB}"
+          />
+        </div>
+        <div class="mb-3">
+          <label for="bio" class="form-label">Bio</label>
+          <textarea
+            class="form-control"
+            id="bio"
+            name="bio"
+            th:field="*{bio}"
+            placeholder="Studied physics from Al-Balqa applied university and currently ......."
+            rows="3"
+          ></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Register</button>
+      </form>
+      <div sec:authorize="isAuthenticated()">
+        <h1
+          th:text="'You already signed in as ' + ${#authentication.name}"
+        ></h1>
+      </div>
+    </main>
+    <footer th:replace="fragments :: footer"></footer>
+    <script th:replace="fragments:: js"></script>
+  </body>
 </html>

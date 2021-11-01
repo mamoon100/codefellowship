@@ -8,7 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import javax.persistence.*;
 import java.sql.Date;
 import java.time.LocalDate;
-import java.util.Collection;
+import java.util.*;
 
 @Table(name = "application_user")
 @Entity
@@ -25,6 +25,16 @@ public class ApplicationUser implements UserDetails {
     private String lastName;
     private Date DOB;
     private String bio;
+    @OneToMany(mappedBy = "applicationUser", orphanRemoval = true)
+    private List<Post> posts;
+
+    public void setPosts(List<Post> posts) {
+        this.posts = posts;
+    }
+
+    public List<Post> getPosts() {
+        return posts;
+    }
 
 
     public ApplicationUser(String username, String password, String firstName, String lastName, Date DOB, String bio) {

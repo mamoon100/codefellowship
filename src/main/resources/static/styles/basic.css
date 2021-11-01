@@ -1,0 +1,60 @@
+body {
+  display: grid;
+  height: 100vh;
+  grid-template-rows: auto 1fr auto;
+}
+
+header {
+  width: 100%;
+  height: 120px;
+  background-color: #27bfce;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+}
+
+header img {
+  width: 280px;
+}
+
+header section a {
+  text-decoration: none;
+  color: black;
+}
+
+#profilePic {
+  height: 80px;
+  width: auto;
+  border: 5px solid black;
+  border-radius: 50%;
+}
+
+header div {
+  place-items: center;
+  display: grid;
+  padding: 15px;
+}
+
+header div span {
+  gap: 25px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+}
+
+header div span p {
+  margin: 0;
+}
+
+footer {
+  width: 100%;
+  height: 100px;
+  background-color: #000;
+  color: #fff;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
