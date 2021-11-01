@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title th:text="${user.username} + 'Profile'">Profile</title>
+    <link th:include="fragments:: link" />
+    <link rel="stylesheet" th:href="@{~/styles/signup.css}" />
+  </head>
+  <body>
+    <header th:replace="fragments :: header"></header>
+    <main>
+      <div class="card mb-3" style="max-width: 780px">
+        <div class="row g-0">
+          <div class="col-md-4">
+            <img
+              src="./assets/profile.jpeg"
+              alt="profile"
+              th:src="@{~/assets/profile.jpeg}"
+              class="img-fluid rounded-start"
+            />
+          </div>
+          <div class="col-md-8">
+            <div class="card-body">
+              <h5
+                class="card-title"
+                th:text="${user.firstName} + ' '+${user.lastName}"
+              ></h5>
+              <p class="card-text" th:text="${user.bio}"></p>
+              <p class="card-text">
+                <small
+                  class="text-muted"
+                  th:text="'Your Birthday is '+${user.DOB}"
+                ></small>
+              </p>
+
+              <a th:if="${isHimSelf}" class="btn btn-primary">
+                Edit This profile
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <footer th:replace="fragments :: footer"></footer>
+    <script th:replace="fragments:: js"></script>
+  </body>
+</html>
