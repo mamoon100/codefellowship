@@ -7,7 +7,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 import java.sql.Date;
-import java.time.LocalDate;
 import java.util.*;
 
 @Table(name = "application_user")
@@ -25,8 +24,20 @@ public class ApplicationUser implements UserDetails {
     private String lastName;
     private Date DOB;
     private String bio;
+    @ManyToMany
+    private Set<ApplicationUser> followings;
+    @ManyToMany
+    private Set<ApplicationUser> followers;
     @OneToMany(mappedBy = "applicationUser", orphanRemoval = true)
     private List<Post> posts;
+
+    public void setFollowers(ApplicationUser followers) {
+        this.followers.add(followers);
+    }
+
+    public void setFollowings(ApplicationUser followings) {
+        this.followings.add(followings);
+    }
 
     public void setPosts(List<Post> posts) {
         this.posts = posts;
@@ -36,6 +47,13 @@ public class ApplicationUser implements UserDetails {
         return posts;
     }
 
+    public Set<ApplicationUser> getFollowings() {
+        return this.followings;
+    }
+
+    public Set<ApplicationUser> getFollowers() {
+        return this.followers;
+    }
 
     public ApplicationUser(String username, String password, String firstName, String lastName, Date DOB, String bio) {
 
@@ -45,6 +63,8 @@ public class ApplicationUser implements UserDetails {
         this.lastName = lastName;
         this.DOB = DOB;
         this.bio = bio;
+        this.followings = new HashSet<>();
+        this.followers = new HashSet<>();
     }
 
     public ApplicationUser() {
