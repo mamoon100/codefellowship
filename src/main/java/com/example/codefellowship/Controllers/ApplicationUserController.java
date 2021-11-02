@@ -9,15 +9,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
-import java.util.Objects;
+import java.util.*;
 
 @Controller
 public class ApplicationUserController {
@@ -37,6 +34,19 @@ public class ApplicationUserController {
         return "index";
     }
 
+    @GetMapping("/feed")
+    public String feedView(Authentication authentication, Model model) {
+        ApplicationUser user = applicationUserRepository.findUserByUsername(authentication.getName());
+        Set<ApplicationUser> followings = user.getFollowers();
+        ArrayList<Post> feedPosts = new ArrayList<>();
+        for (ApplicationUser following : followings) {
+            Post[] posts = postRepository.findPostByApplicationUser(following);
+            Collections.addAll(feedPosts, posts);
+        }
+        model.addAttribute("posts", feedPosts);
+        return "feed";
+    }
+
     @GetMapping("/users/{id}")
     public String getUser(Authentication authentication, Model model, @PathVariable Long id) {
         try {
@@ -45,6 +55,8 @@ public class ApplicationUserController {
             boolean isHimSelf = Objects.equals(authentication.getName(), user.getUsername());
             model.addAttribute("isHimSelf", isHimSelf);
             model.addAttribute("user", user);
+//            System.out.println(user.getFollowing());
+//            System.out.println(user.getFollowers());
             return "user";
         } catch (Exception e) {
             e.printStackTrace();
@@ -108,5 +120,22 @@ public class ApplicationUserController {
         }
         return new RedirectView("/");
 
+    }
+
+
+    @PostMapping("/follow/{id}")
+    public RedirectView follow(Authentication authentication, @PathVariable Long id) {
+        ApplicationUser follower = applicationUserRepository.findUserByUsername(authentication.getName());
+        ApplicationUser following = applicationUserRepository.findUserById(id);
+        follower.setFollowers(following);
+        following.setFollowings(follower);
+        applicationUserRepository.save(follower);
+        applicationUserRepository.save(following);
+//        applicationUserRepository.saveAll(List.of(follower, following));
+//        System.out.println(follower.getFollowers());
+//        System.out.println(follower.getFollowing());
+//        System.out.println(following.getFollowing());
+//        System.out.println(following.getFollowers());
+        return new RedirectView("/users/" + id);
     }
 }
