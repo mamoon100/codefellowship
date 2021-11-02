@@ -1,47 +1,66 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8"/>
     <title th:text="${user.username} + 'Profile'">Profile</title>
-    <link th:include="fragments:: link" />
-    <link rel="stylesheet" th:href="@{~/styles/signup.css}" />
-  </head>
-  <body>
-    <header th:replace="fragments :: header"></header>
-    <main>
-      <div class="card mb-3" style="max-width: 780px">
+    <link th:include="fragments:: link"/>
+    <link rel="stylesheet" th:href="@{~/styles/profile.css}"/>
+</head>
+<body>
+<header th:replace="fragments :: header"></header>
+<main>
+    <div class="card mb-3" style="max-width: 780px">
         <div class="row g-0">
-          <div class="col-md-4">
-            <img
-              src="./assets/profile.jpeg"
-              alt="profile"
-              th:src="@{~/assets/profile.jpeg}"
-              class="img-fluid rounded-start"
-            />
-          </div>
-          <div class="col-md-8">
-            <div class="card-body">
-              <h5
-                class="card-title"
-                th:text="${user.firstName} + ' '+${user.lastName}"
-              ></h5>
-              <p class="card-text" th:text="${user.bio}"></p>
-              <p class="card-text">
-                <small
-                  class="text-muted"
-                  th:text="'Your Birthday is '+${user.DOB}"
-                ></small>
-              </p>
-
-              <a th:if="${isHimSelf}" class="btn btn-primary">
-                Edit This profile
-              </a>
+            <div class="col-md-4">
+                <img
+                        src="./assets/profile.jpeg"
+                        alt="profile"
+                        th:src="@{~/assets/profile.jpeg}"
+                        class="img-fluid rounded-start"
+                />
             </div>
-          </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h5
+                            class="card-title"
+                            th:text="${user.firstName} + ' '+${user.lastName}"
+                    ></h5>
+                    <p class="card-text" th:text="${user.bio}"></p>
+                    <p class="card-text">
+                        <small
+                                class="text-muted"
+                                th:text="'Your Birthday is '+${user.DOB}"
+                        ></small>
+                    </p>
+
+                    <a th:if="${isHimSelf}" class="btn btn-primary">
+                        Edit This profile
+                    </a>
+                </div>
+            </div>
         </div>
-      </div>
-    </main>
-    <footer th:replace="fragments :: footer"></footer>
-    <script th:replace="fragments:: js"></script>
-  </body>
+    </div>
+    <div class="card mb-3" style="max-width: 780px">
+        <div class="row g-0" th:each="post: ${posts}">
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h5
+                            class="card-title"
+                            th:text="${post.applicationUser.firstName} + ' '+${post.applicationUser.lastName}"
+                    ></h5>
+                    <p class="card-text" th:text="${post.body}"></p>
+                    <p class="card-text">
+                        <small
+                                class="text-muted"
+                                th:text="${post.createdAt}"
+                        ></small>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<footer th:replace="fragments :: footer"></footer>
+<script th:replace="fragments:: js"></script>
+</body>
 </html>

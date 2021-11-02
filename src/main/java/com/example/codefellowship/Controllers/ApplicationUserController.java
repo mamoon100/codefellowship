@@ -1,7 +1,9 @@
 package com.example.codefellowship.Controllers;
 
 import com.example.codefellowship.Models.ApplicationUser;
+import com.example.codefellowship.Models.Post;
 import com.example.codefellowship.Repositories.ApplicationUserRepository;
+import com.example.codefellowship.Repositories.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.security.Principal;
 import java.util.Objects;
 
 @Controller
@@ -24,10 +27,13 @@ public class ApplicationUserController {
     @Autowired
     PasswordEncoder encoder;
 
+    @Autowired
+    PostRepository postRepository;
+
 
     @GetMapping("/")
-    public String index(Authentication authentication) {
-        System.out.println(authentication);
+    public String index(Model model) {
+        model.addAttribute("post", new Post());
         return "index";
     }
 
@@ -52,7 +58,9 @@ public class ApplicationUserController {
         try {
             if (authentication == null) throw new Exception("You are not logged in");
             ApplicationUser user = applicationUserRepository.findUserByUsername(authentication.getName());
+            Post[] posts = postRepository.findPostByApplicationUser(user);
             model.addAttribute("user", user);
+            model.addAttribute("posts", posts);
             return "profile";
         } catch (Exception e) {
             e.printStackTrace();
@@ -87,5 +95,18 @@ public class ApplicationUserController {
             e.printStackTrace();
             return new RedirectView("/");
         }
+    }
+
+    @PostMapping("/post")
+    public RedirectView postPost(@ModelAttribute Post post, Authentication authentication) {
+        try {
+            ApplicationUser applicationUser = applicationUserRepository.findUserByUsername(authentication.getName());
+            post.setApplicationUser(applicationUser);
+            postRepository.save(post);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new RedirectView("/");
+
     }
 }

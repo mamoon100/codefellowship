@@ -1,23 +1,34 @@
 <!DOCTYPE html>
 <html
-  lang="en"
-  xmlns:sec="http://www.w3.org/1999/xhtml"
-  xmlns:th="http://www.w3.org/1999/xhtml"
+        lang="en"
+        xmlns:sec="http://www.w3.org/1999/xhtml"
+        xmlns:th="http://www.w3.org/1999/xhtml"
 >
-  <head>
-    <meta charset="UTF-8" />
+<head>
+    <meta charset="UTF-8"/>
     <title>Code Fellows</title>
-    <link th:include="fragments:: link" />
-  </head>
-  <body>
-    <header th:replace="fragments :: header"></header>
-    <main>
-      <h1 class="text-center">There is no Post's to show right now.</h1>
-    </main>
-    <!-- <h1 sec:authorize="isAuthenticated()">You are authorized</h1>
+    <link th:include="fragments:: link"/>
+</head>
+<body>
+<header th:replace="fragments :: header"></header>
+<main>
+    <div sec:authorize="isAuthenticated()">
+        <form action="/post" method="post" th:object="${post}">
+            <div class="mb-3">
+                <label for="body" class="form-label">Write Something</label>
+                <textarea class="form-control" id="body" rows="5" th:field="*{body}"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Post</button>
+        </form>
+    </div>
+    <div sec:authorize="isAnonymous()">
+        <h1>Log in to start postin</h1>
+    </div>
+</main>
+<!-- <h1 sec:authorize="isAuthenticated()">You are authorized</h1>
 <h1 sec:authorize="isAuthenticated()" sec:authentication="name"></h1>
 <h1 sec:authorize="isAnonymous()">You are not logged in</h1> -->
-    <footer th:replace="fragments :: footer"></footer>
-    <script th:replace="fragments:: js"></script>
-  </body>
+<footer th:replace="fragments :: footer"></footer>
+<script th:replace="fragments:: js"></script>
+</body>
 </html>

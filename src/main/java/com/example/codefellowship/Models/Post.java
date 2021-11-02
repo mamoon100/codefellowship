@@ -1,8 +1,10 @@
 package com.example.codefellowship.Models;
 
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 
 @Table(name = "post")
 @Entity
@@ -12,8 +14,8 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String body;
-    @CreatedDate
-    private String createdAt;
+    @CreationTimestamp
+    private Timestamp createdAt;
     @ManyToOne
     @JoinColumn(name = "application_user_id")
     private ApplicationUser applicationUser;
@@ -29,7 +31,7 @@ public class Post {
     public Post() {
     }
 
-    public Post(String body, String createdAt, ApplicationUser applicationUser) {
+    public Post(String body, Timestamp createdAt, ApplicationUser applicationUser) {
         this.body = body;
         this.createdAt = createdAt;
         this.applicationUser = applicationUser;
@@ -43,11 +45,11 @@ public class Post {
         this.body = body;
     }
 
-    public String getCreatedAt() {
+    public Timestamp getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(String createdAt) {
+    public void setCreatedAt(Timestamp createdAt) {
         this.createdAt = createdAt;
     }
 
